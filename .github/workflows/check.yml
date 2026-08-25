@@ -1,0 +1,32 @@
+name: Check
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate JSON files
+        run: |
+          find . -name "*.json" -not -path "./.git/*" | while read f; do
+            echo "Checking $f"
+            python3 -m json.tool "$f" > /dev/null || exit 1
+          done
+
+      - name: Check skill directories have required files
+        run: |
+          for dir in ai-agent-skills ai-coding-skills ai-tools ai-wiki; do
+            for skill in "$dir"/*/; do
+              if [ -d "$skill" ]; then
+                echo "Checking $skill"
+                [ -f "$skill/skill.json" ] || [ -f "$skill/wiki.json" ] || [ -f "$skill/tool.json" ] || { echo "Missing metadata in $skill"; exit 1; }
+                [ -f "$skill/README.md" ] || { echo "Missing README.md in $skill"; exit 1; }
+              fi
+            done
+          done
