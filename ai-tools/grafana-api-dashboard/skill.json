@@ -1,7 +1,7 @@
 {
-  "name": "grafana-api-dashboard"
+  "name": "grafana-api-dashboard",
   "version": "1.0.0",
-  "description": "基于模板快速生成完整的 Grafana API 监控 Dashboard，支持 12 面板标准化输出",
+  "description": "基于模板快速生成完整的 Grafana API 监控 Dashboard，支持 14 面板标准化输出",
   "category": "ai-tools",
   "tags": ["grafana", "prometheus", "dashboard", "monitoring"],
   "author": "DevOps Team",
