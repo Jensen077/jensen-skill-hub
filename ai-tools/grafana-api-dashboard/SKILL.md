@@ -30,12 +30,29 @@ description: 基于 JSON 模板快速生成完整的 Grafana API 监控 Dashboar
 | 参数 | 必填 | 说明 | 示例 |
 |------|------|------|------|
 | `json_template` | ✅ | 用户提供的 JSON 模板 | 粘贴 JSON 或引用文件 |
-| `ds` | ✅ | 数据源名称或 UID | `aws-hk-uat` / `aws-jp-prd` |
+| `ds` | ✅ | 数据源名称或 UID，可选值见下方列表 | `aws-hk-uat` / `aws-jp-prd` |
 | `app` | ✅ | 应用/服务名称 | `agent-japan-dinersclub-website` |
 | `api` | ⚠️ | 接口列表（正则，`\|` 分隔）。未提供时自动从用户代码/配置中提取 API 路径 | `/base/login\|/base/logout` |
 | `api_source` | ⚠️ | API 路径来源文件（代码、配置文件、Swagger 等）。未提供 `api` 且未提供此参数时，移除 URI 过滤 | 项目源码目录、application.yml、swagger.json |
 | `dashboard_title` | ⚠️ | 看板标题 | `API监控-项目名-服务名` |
 | `time_range` | ⚠️ | 默认时间范围（默认 `now-6h`） | `now-12h` |
+
+**ds 可选值**（也可自定义输入其他数据源）：
+
+| 数据源 | 说明 |
+|--------|------|
+| `aws-jp-prd` | 日本生产 |
+| `aws-sg-prd` | 新加坡生产 |
+| `aws-uk-prd` | 英国生产 |
+| `aws-ie-prd` | 爱尔兰生产 |
+| `aws-hk-prd` | 香港生产 |
+| `ali-ai-prd` | 阿里 AI 生产 |
+| `aws-jp-visa-apac-prd` | 日本 Visa APAC 生产 |
+| `aws-sg-prd-visa-apac` | 新加坡 Visa APAC 生产 |
+| `aws-hk-uat` | 香港 UAT |
+| `aws-uk-uat` | 英国 UAT |
+| `aws-ie-uat` | 爱尔兰 UAT |
+| `gz-idc2-prd` | 广州 IDC2 生产 |
 
 ---
 
@@ -231,7 +248,7 @@ description: 基于 JSON 模板快速生成完整的 Grafana API 监控 Dashboar
 > - ds: aws-hk-uat
 > - app: agent-japan-dinersclub-website
 
-**行为**：从模板继承 `api` 值，仅更新 `ds` 和 `app`
+**行为**：清空模板原有 `api` 值，移除 URI 过滤（匹配所有接口），仅更新 `ds` 和 `app`
 
 ### 示例 3：仅 JSON 模板
 

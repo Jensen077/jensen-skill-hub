@@ -1,0 +1,14 @@
+{
+  "name": "grafana-api-detail-dashboard",
+  "version": "1.0.0",
+  "description": "基于模板生成 Grafana API 详细监控 Dashboard，按 API 逐行展示成功率、延迟、QPM、百分位、错误码等 6 类面板",
+  "category": "ai-tools",
+  "tags": ["grafana", "prometheus", "dashboard", "monitoring", "api-detail"],
+  "author": "DevOps Team",
+  "team": "APAC",
+  "dependencies": [],
+  "platform": ["opencode", "claude-code"],
+  "lastUpdated": "2026-08-26",
+  "rating": 0,
+  "usageCount": 0
+}
