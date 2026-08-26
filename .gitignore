@@ -33,9 +33,6 @@ tmp/
 !kingbase8-8.6.0.jar
 
 ## AI
-README/
-AGENTS.md
-CLAUDE.md
 .codebuddy/
 specs/
 .specify/

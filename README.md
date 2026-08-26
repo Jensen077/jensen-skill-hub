@@ -24,22 +24,10 @@ apac-skills/
 
 ### 搜索 Skill
 
-```bash
-./scripts/search-skills.sh --category ai-agent-skills
-./scripts/search-skills.sh --tag "debugging"
-./scripts/search-skills.sh --keyword "code review"
-```
-
 ### 创建新 Skill
 
-```bash
-cp -r templates/skill-template/ ai-agent-skills/my-new-skill/
-# 编辑 ai-agent-skills/my-new-skill/skill.json 和 README.md
-```
+使用 skill-creator
 
-## 贡献
-
-详见 [CONTRIBUTING.md](./CONTRIBUTING.md)
 
 ## 分类
 
