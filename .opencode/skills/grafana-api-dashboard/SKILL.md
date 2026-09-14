@@ -95,9 +95,14 @@ description: 基于 JSON 模板快速生成完整的 Grafana API 监控 Dashboar
 {
   "name": "ds",
   "current": { "text": "<用户 ds>", "value": "<用户 ds 值或 UID>" },
-  "regex": "<保留原正则或更新>"
+  "regex": "<更新为用户 ds 名称>"
 }
 ```
+
+**ds 变量处理说明**：
+- `text`：显示名称（用户提供的 ds 名称）
+- `value`：数据源标识符（优先使用 UID，如用户只提供名称则使用名称）
+- `regex`：更新为用户提供的数据源名称，确保下拉菜单显示正确
 ```json
 {
   "name": "app",
@@ -303,7 +308,7 @@ description: 基于 JSON 模板快速生成完整的 Grafana API 监控 Dashboar
 | 未提供 `api` 且无代码文件 | **清空 api 变量**，移除 PromQL 中 `uri=~"$api"` 过滤（匹配所有 URI） |
 | `panels` 为空 | 生成全部 14 个标准面板 |
 | `templating` 缺变量 | 自动补全 `ds`、`app`、`api` |
-| 数据源 UID 未知 | 保留 `${ds}` 变量形式 |
+| 数据源 UID 未知 | 使用名称作为 value，并提示用户：`如导入后数据源不工作，请提供数据源 UID（在 Grafana → Data Sources → 点击数据源 → URL 中获取）` |
 
 ---
 

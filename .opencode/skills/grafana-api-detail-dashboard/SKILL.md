@@ -44,7 +44,7 @@ description: 基于 JSON 模板生成 Grafana API 详细监控 Dashboard，按 A
 | 参数 | 必填 | 说明 | 示例 |
 |------|------|------|------|
 | `json_template` | ✅ | JSON 模板（未提供则用默认） | 粘贴 JSON 或引用文件 |
-| `ds` | ✅ | 数据源名称或 UID，可选值见下方列表 | `aws-sg-prd` / `aws-hk-uat` |
+| `ds` | ✅ | 数据源名称或 UID，可选值见下方列表。**注意：如只提供名称，将同时用于 text 和 value，但 Grafana 可能需要 UID** | `aws-sg-prd` / `aws-hk-uat` |
 | `app` | ✅ | 应用/服务名称 | `ebridge-integration` |
 | `api` | ⚠️ | 接口列表。未提供时从代码/配置中提取或清空 | `/order/booking` |
 | `api_source` | ⚠️ | API 路径来源文件 | 项目源码目录、swagger.json |
@@ -108,9 +108,14 @@ description: 基于 JSON 模板生成 Grafana API 详细监控 Dashboard，按 A
 {
   "name": "ds",
   "current": { "text": "<用户 ds>", "value": "<用户 ds UID>" },
-  "regex": "<保留原正则或更新>"
+  "regex": "<更新为用户 ds 名称>"
 }
 ```
+
+**ds 变量处理说明**：
+- `text`：显示名称（用户提供的 ds 名称）
+- `value`：数据源标识符（优先使用 UID，如用户只提供名称则使用名称）
+- `regex`：更新为用户提供的数据源名称，确保下拉菜单显示正确
 
 **app 变量**（custom 类型）：
 ```json
@@ -343,7 +348,7 @@ description: 基于 JSON 模板生成 Grafana API 详细监控 Dashboard，按 A
 | 未提供 `api` 且无代码文件 | **保留 api 为 label_values 动态查询**（Prometheus 运行时自动填充） |
 | `panels` 为空 | 生成 Row + 6 标准 Timeseries 面板 |
 | `templating` 缺变量 | 自动补全 `ds`、`app`、`api` |
-| 数据源 UID 未知 | 保留 `${ds}` 变量形式 |
+| 数据源 UID 未知 | 使用名称作为 value，并提示用户：`如导入后数据源不工作，请提供数据源 UID（在 Grafana → Data Sources → 点击数据源 → URL 中获取）` |
 
 ---
 
