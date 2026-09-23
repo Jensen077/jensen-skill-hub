@@ -1,0 +1,14 @@
+{
+  "name": "prometheus-alert-rules",
+  "version": "1.2.0",
+  "description": "生成 API 服务 Prometheus 告警规则 YAML，6 维度（总/单URI 成功率、总/单URI 平均RT、第三方API 成功率与耗时）× P0-P3 分级，含最低流量门槛",
+  "category": "ai-tools",
+  "tags": ["prometheus", "alert", "rules", "monitoring", "promql"],
+  "author": "DevOps Team",
+  "team": "APAC",
+  "dependencies": [],
+  "platform": ["opencode", "claude-code"],
+  "lastUpdated": "2026-09-22",
+  "rating": 0,
+  "usageCount": 0
+}

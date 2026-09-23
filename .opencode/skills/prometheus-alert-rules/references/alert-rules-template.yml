@@ -1,0 +1,440 @@
+groups:
+  - name: "{{groupName}}"
+    rules:
+      # ====================== 1.总接口成功率（全局兜底） ======================
+      - alert: "{{appSlug}}TotalSuccessRateP3"
+        expr: |
+          1 - (
+            sum by(namespace,app)(rate(api_request_total{app="{{app}}",success="0", uri!="/**"}[2m]))
+            /
+            sum by(namespace,app)(rate(api_request_total{app="{{app}}", uri!="/**"}[2m]))
+          ) < 0.90
+          AND
+          sum by(namespace,app)(increase(api_request_total{app="{{app}}", uri!="/**"}[2m])) > 10
+        for: 5m
+        labels:
+          severity: p3
+          alertType: qw
+          team: 'BY'
+        annotations:
+          summary: "【提示】{{serviceName}}-总接口成功率低于90%"
+          description: "app={{ $labels.app }}，总接口成功率={{ $value }}，持续5分钟低于90%"
+
+      - alert: "{{appSlug}}TotalSuccessRateP2"
+        expr: |
+          1 - (
+            sum by(namespace,app)(rate(api_request_total{app="{{app}}",success="0", uri!="/**"}[2m]))
+            /
+            sum by(namespace,app)(rate(api_request_total{app="{{app}}", uri!="/**"}[2m]))
+          ) < 0.85
+          AND
+          sum by(namespace,app)(increase(api_request_total{app="{{app}}", uri!="/**"}[2m])) > 10
+        for: 3m
+        labels:
+          severity: p2
+          alertType: qw
+          team: 'BY'
+        annotations:
+          summary: "【预警】{{serviceName}}-总接口成功率低于85%"
+          description: "app={{ $labels.app }}，总接口成功率={{ $value }}，持续3分钟低于85%"
+
+      - alert: "{{appSlug}}TotalSuccessRateP1"
+        expr: |
+          1 - (
+            sum by(namespace,app)(rate(api_request_total{app="{{app}}",success="0", uri!="/**"}[2m]))
+            /
+            sum by(namespace,app)(rate(api_request_total{app="{{app}}", uri!="/**"}[2m]))
+          ) < 0.70
+          AND
+          sum by(namespace,app)(increase(api_request_total{app="{{app}}", uri!="/**"}[2m])) > 10
+        for: 2m
+        labels:
+          severity: p1
+          alertType: qw
+          team: 'BY'
+        annotations:
+          summary: "【严重】{{serviceName}}-总接口成功率低于70%"
+          description: "app={{ $labels.app }}，总接口成功率={{ $value }}，持续2分钟低于70%"
+
+      - alert: "{{appSlug}}TotalSuccessRateP0"
+        expr: |
+          1 - (
+            sum by(namespace,app)(rate(api_request_total{app="{{app}}",success="0", uri!="/**"}[2m]))
+            /
+            sum by(namespace,app)(rate(api_request_total{app="{{app}}", uri!="/**"}[2m]))
+          ) < 0.40
+          AND
+          sum by(namespace,app)(increase(api_request_total{app="{{app}}", uri!="/**"}[2m])) > 10
+        for: 1m
+        labels:
+          severity: p0
+          alertType: tel
+          team: 'BY'
+        annotations:
+          summary: "【故障】{{serviceName}}-总接口成功率低于40%"
+          description: "app={{ $labels.app }}，总接口成功率={{ $value }}，持续1分钟低于40%"
+
+      # ====================== 2.单URI接口成功率 ======================
+      - alert: "{{appSlug}}UriSuccessRateP3"
+        expr: |
+          1 - (
+            sum by(namespace,app,uri)(rate(api_request_total{app="{{app}}",success="0", uri!="/**"}[2m]))
+            /
+            sum by(namespace,app,uri)(rate(api_request_total{app="{{app}}", uri!="/**"}[2m]))
+          ) < 0.90
+          AND
+          sum by(namespace,app,uri)(increase(api_request_total{app="{{app}}", uri!="/**"}[2m])) > 10
+        for: 5m
+        labels:
+          severity: p3
+          alertType: qw
+          team: 'BY'
+        annotations:
+          summary: "【提示】{{serviceName}}-单URI {{ $labels.uri }} 成功率低于90%"
+          description: "app={{ $labels.app }}, uri={{ $labels.uri }}，成功率={{ $value }}，持续5分钟低于90%"
+
+      - alert: "{{appSlug}}UriSuccessRateP2"
+        expr: |
+          1 - (
+            sum by(namespace,app,uri)(rate(api_request_total{app="{{app}}",success="0", uri!="/**"}[2m]))
+            /
+            sum by(namespace,app,uri)(rate(api_request_total{app="{{app}}", uri!="/**"}[2m]))
+          ) < 0.82
+          AND
+          sum by(namespace,app,uri)(increase(api_request_total{app="{{app}}", uri!="/**"}[2m])) > 10
+        for: 3m
+        labels:
+          severity: p2
+          alertType: qw
+          team: 'BY'
+        annotations:
+          summary: "【预警】{{serviceName}}-单URI {{ $labels.uri }} 成功率低于82%"
+          description: "app={{ $labels.app }}, uri={{ $labels.uri }}，成功率={{ $value }}，持续3分钟低于82%"
+
+      - alert: "{{appSlug}}UriSuccessRateP1"
+        expr: |
+          1 - (
+            sum by(namespace,app,uri)(rate(api_request_total{app="{{app}}",success="0", uri!="/**"}[2m]))
+            /
+            sum by(namespace,app,uri)(rate(api_request_total{app="{{app}}", uri!="/**"}[2m]))
+          ) < 0.70
+          AND
+          sum by(namespace,app,uri)(increase(api_request_total{app="{{app}}", uri!="/**"}[2m])) > 10
+        for: 2m
+        labels:
+          severity: p1
+          alertType: qw
+          team: 'BY'
+        annotations:
+          summary: "【严重】{{serviceName}}-单URI {{ $labels.uri }} 成功率低于70%"
+          description: "app={{ $labels.app }}, uri={{ $labels.uri }}，成功率={{ $value }}，持续2分钟低于70%"
+
+      - alert: "{{appSlug}}UriSuccessRateP0"
+        expr: |
+          1 - (
+            sum by(namespace,app,uri)(rate(api_request_total{app="{{app}}",success="0", uri!="/**"}[2m]))
+            /
+            sum by(namespace,app,uri)(rate(api_request_total{app="{{app}}", uri!="/**"}[2m]))
+          ) < 0.30
+          AND
+          sum by(namespace,app,uri)(increase(api_request_total{app="{{app}}", uri!="/**"}[2m])) > 10
+        for: 1m
+        labels:
+          severity: p0
+          alertType: tel
+          team: 'BY'
+        annotations:
+          summary: "【故障】{{serviceName}}-单URI {{ $labels.uri }} 成功率低于30%"
+          description: "app={{ $labels.app }}, uri={{ $labels.uri }}，成功率={{ $value }}，持续1分钟低于30%"
+
+      # ====================== 3.总接口平均耗时 ======================
+      - alert: "{{appSlug}}TotalAvgRtP3"
+        expr: |
+          (
+            sum by(namespace,app)(rate(api_request_time_sum{app="{{app}}", uri!="/**"}[2m]))
+            /
+            sum by(namespace,app)(rate(api_request_time_count{app="{{app}}", uri!="/**"}[2m]))
+          ) > 2000
+          AND
+          sum by(namespace,app)(increase(api_request_time_count{app="{{app}}", uri!="/**"}[2m])) > 10
+        for: 5m
+        labels:
+          severity: p3
+          alertType: qw
+          team: 'BY'
+        annotations:
+          summary: "【提示】{{serviceName}}-总接口平均RT>2000ms"
+          description: "app={{ $labels.app }}，平均RT={{ $value }}ms，持续5分钟大于2000ms"
+
+      - alert: "{{appSlug}}TotalAvgRtP2"
+        expr: |
+          (
+            sum by(namespace,app)(rate(api_request_time_sum{app="{{app}}", uri!="/**"}[2m]))
+            /
+            sum by(namespace,app)(rate(api_request_time_count{app="{{app}}", uri!="/**"}[2m]))
+          ) > 4000
+          AND
+          sum by(namespace,app)(increase(api_request_time_count{app="{{app}}", uri!="/**"}[2m])) > 10
+        for: 3m
+        labels:
+          severity: p2
+          alertType: qw
+          team: 'BY'
+        annotations:
+          summary: "【预警】{{serviceName}}-总接口平均RT>4000ms"
+          description: "app={{ $labels.app }}，平均RT={{ $value }}ms，持续3分钟大于4000ms"
+
+      - alert: "{{appSlug}}TotalAvgRtP1"
+        expr: |
+          (
+            sum by(namespace,app)(rate(api_request_time_sum{app="{{app}}", uri!="/**"}[2m]))
+            /
+            sum by(namespace,app)(rate(api_request_time_count{app="{{app}}", uri!="/**"}[2m]))
+          ) > 10000
+          AND
+          sum by(namespace,app)(increase(api_request_time_count{app="{{app}}", uri!="/**"}[2m])) > 10
+        for: 2m
+        labels:
+          severity: p1
+          alertType: qw
+          team: 'BY'
+        annotations:
+          summary: "【严重】{{serviceName}}-总接口平均RT>10000ms"
+          description: "app={{ $labels.app }}，平均RT={{ $value }}ms，持续2分钟大于10000ms"
+
+      - alert: "{{appSlug}}TotalAvgRtP0"
+        expr: |
+          (
+            sum by(namespace,app)(rate(api_request_time_sum{app="{{app}}", uri!="/**"}[2m]))
+            /
+            sum by(namespace,app)(rate(api_request_time_count{app="{{app}}", uri!="/**"}[2m]))
+          ) > 20000
+          AND
+          sum by(namespace,app)(increase(api_request_time_count{app="{{app}}", uri!="/**"}[2m])) > 10
+        for: 1m
+        labels:
+          severity: p0
+          alertType: tel
+          team: 'BY'
+        annotations:
+          summary: "【故障】{{serviceName}}-总接口平均RT>20000ms"
+          description: "app={{ $labels.app }}，平均RT={{ $value }}ms，持续1分钟大于20000ms"
+
+      # ====================== 4.单URI接口平均耗时 ======================
+      - alert: "{{appSlug}}UriAvgRtP3"
+        expr: |
+          (
+            sum by(namespace,app,uri)(rate(api_request_time_sum{app="{{app}}", uri!="/**"}[2m]))
+            /
+            sum by(namespace,app,uri)(rate(api_request_time_count{app="{{app}}", uri!="/**"}[2m]))
+          ) > 3000
+          AND
+          sum by(namespace,app,uri)(increase(api_request_time_count{app="{{app}}", uri!="/**"}[2m])) > 10
+        for: 5m
+        labels:
+          severity: p3
+          alertType: qw
+          team: 'BY'
+        annotations:
+          summary: "【提示】{{serviceName}}-URI {{ $labels.uri }} 平均RT>3000ms"
+          description: "app={{ $labels.app }}, uri={{ $labels.uri }}，平均RT={{ $value }}ms，持续5分钟大于3000ms"
+
+      - alert: "{{appSlug}}UriAvgRtP2"
+        expr: |
+          (
+            sum by(namespace,app,uri)(rate(api_request_time_sum{app="{{app}}", uri!="/**"}[2m]))
+            /
+            sum by(namespace,app,uri)(rate(api_request_time_count{app="{{app}}", uri!="/**"}[2m]))
+          ) > 5000
+          AND
+          sum by(namespace,app,uri)(increase(api_request_time_count{app="{{app}}", uri!="/**"}[2m])) > 10
+        for: 3m
+        labels:
+          severity: p2
+          alertType: qw
+          team: 'BY'
+        annotations:
+          summary: "【预警】{{serviceName}}-URI {{ $labels.uri }} 平均RT>5000ms"
+          description: "app={{ $labels.app }}, uri={{ $labels.uri }}，平均RT={{ $value }}ms，持续3分钟大于5000ms"
+
+      - alert: "{{appSlug}}UriAvgRtP1"
+        expr: |
+          (
+            sum by(namespace,app,uri)(rate(api_request_time_sum{app="{{app}}", uri!="/**"}[2m]))
+            /
+            sum by(namespace,app,uri)(rate(api_request_time_count{app="{{app}}", uri!="/**"}[2m]))
+          ) > 12000
+          AND
+          sum by(namespace,app,uri)(increase(api_request_time_count{app="{{app}}", uri!="/**"}[2m])) > 10
+        for: 2m
+        labels:
+          severity: p1
+          alertType: qw
+          team: 'BY'
+        annotations:
+          summary: "【严重】{{serviceName}}-URI {{ $labels.uri }} 平均RT>12000ms"
+          description: "app={{ $labels.app }}, uri={{ $labels.uri }}，平均RT={{ $value }}ms，持续2分钟大于12000ms"
+
+      - alert: "{{appSlug}}UriAvgRtP0"
+        expr: |
+          (
+            sum by(namespace,app,uri)(rate(api_request_time_sum{app="{{app}}", uri!="/**"}[2m]))
+            /
+            sum by(namespace,app,uri)(rate(api_request_time_count{app="{{app}}", uri!="/**"}[2m]))
+          ) > 25000
+          AND
+          sum by(namespace,app,uri)(increase(api_request_time_count{app="{{app}}", uri!="/**"}[2m])) > 10
+        for: 1m
+        labels:
+          severity: p0
+          alertType: tel
+          team: 'BY'
+        annotations:
+          summary: "【故障】{{serviceName}}-URI {{ $labels.uri }} 平均RT>25000ms"
+          description: "app={{ $labels.app }}, uri={{ $labels.uri }}，平均RT={{ $value }}ms，持续1分钟大于25000ms"
+
+      # ====================== 5.第三方API执行结果埋点成功率（按op_code,op_name分组） ======================
+      - alert: "{{appSlug}}BizOpSuccessRateP3"
+        expr: |
+          1 - (
+            sum by(namespace,app,op_code,op_name)(rate(dp_biz_operation_total{app="{{app}}",result_type!="OK"}[10m]))
+            /
+            sum by(namespace,app,op_code,op_name)(rate(dp_biz_operation_total{app="{{app}}"}[10m]))
+          ) < 0.90
+          AND
+          sum by(namespace,app,op_code,op_name)(increase(dp_biz_operation_total{app="{{app}}"}[10m])) > 10
+        for: 5m
+        labels:
+          severity: p3
+          alertType: qw
+          team: 'BY'
+        annotations:
+          summary: "【提示】{{serviceName}}-第三方API {{ $labels.op_name }} 成功率低于90%"
+          description: "app={{ $labels.app }}, op_code={{ $labels.op_code }}, op_name={{ $labels.op_name }}，业务埋点成功率={{ $value }}，持续5分钟低于90%"
+
+      - alert: "{{appSlug}}BizOpSuccessRateP2"
+        expr: |
+          1 - (
+            sum by(namespace,app,op_code,op_name)(rate(dp_biz_operation_total{app="{{app}}",result_type!="OK"}[10m]))
+            /
+            sum by(namespace,app,op_code,op_name)(rate(dp_biz_operation_total{app="{{app}}"}[10m]))
+          ) < 0.85
+          AND
+          sum by(namespace,app,op_code,op_name)(increase(dp_biz_operation_total{app="{{app}}"}[10m])) > 10
+        for: 3m
+        labels:
+          severity: p2
+          alertType: qw
+          team: 'BY'
+        annotations:
+          summary: "【预警】{{serviceName}}-第三方API {{ $labels.op_name }} 成功率低于85%"
+          description: "app={{ $labels.app }}, op_code={{ $labels.op_code }}, op_name={{ $labels.op_name }}，业务埋点成功率={{ $value }}，持续3分钟低于85%"
+
+      - alert: "{{appSlug}}BizOpSuccessRateP1"
+        expr: |
+          1 - (
+            sum by(namespace,app,op_code,op_name)(rate(dp_biz_operation_total{app="{{app}}",result_type!="OK"}[10m]))
+            /
+            sum by(namespace,app,op_code,op_name)(rate(dp_biz_operation_total{app="{{app}}"}[10m]))
+          ) < 0.70
+          AND
+          sum by(namespace,app,op_code,op_name)(increase(dp_biz_operation_total{app="{{app}}",result_type!="OK"}[10m])) >= 3
+        for: 2m
+        labels:
+          severity: p1
+          alertType: qw
+          team: 'BY'
+        annotations:
+          summary: "【严重】{{serviceName}}-第三方API {{ $labels.op_name }} 成功率低于70%"
+          description: "app={{ $labels.app }}, op_code={{ $labels.op_code }}, op_name={{ $labels.op_name }}，业务埋点成功率={{ $value }}，持续2分钟低于70%"
+
+      - alert: "{{appSlug}}BizOpSuccessRateP0"
+        expr: |
+          1 - (
+            sum by(namespace,app,op_code,op_name)(rate(dp_biz_operation_total{app="{{app}}",result_type!="OK"}[10m]))
+            /
+            sum by(namespace,app,op_code,op_name)(rate(dp_biz_operation_total{app="{{app}}"}[10m]))
+          ) < 0.40
+          AND
+          sum by(namespace,app,op_code,op_name)(increase(dp_biz_operation_total{app="{{app}}",result_type!="OK"}[10m])) >= 5
+        for: 1m
+        labels:
+          severity: p0
+          alertType: tel
+          team: 'BY'
+        annotations:
+          summary: "【故障】{{serviceName}}-第三方API {{ $labels.op_name }} 成功率低于40%"
+          description: "app={{ $labels.app }}, op_code={{ $labels.op_code }}, op_name={{ $labels.op_name }}，业务埋点成功率={{ $value }}，持续1分钟低于40%"
+
+      # ====================== 6.第三方API耗时埋点 ======================
+      - alert: "{{appSlug}}MethodExecAvgRtP3"
+        expr: |
+          (
+            sum by(namespace,app,class,method)(rate(dp_method_exec_time_total{app="{{app}}"}[10m]))
+            /
+            sum by(namespace,app,class,method)(rate(dp_method_exec_total{app="{{app}}"}[10m]))
+          ) > 3000
+          AND
+          sum by(namespace,app,class,method)(increase(dp_method_exec_total{app="{{app}}"}[10m])) >= 2
+        for: 5m
+        labels:
+          severity: p3
+          alertType: qw
+          team: 'BY'
+        annotations:
+          summary: "【提示】{{serviceName}}-第三方API {{ $labels.method }} 平均耗时>3000ms"
+          description: "app={{ $labels.app }}, method={{ $labels.method }}，平均耗时={{ $value }}ms，持续5分钟大于3000ms"
+
+      - alert: "{{appSlug}}MethodExecAvgRtP2"
+        expr: |
+          (
+            sum by(namespace,app,class,method)(rate(dp_method_exec_time_total{app="{{app}}"}[10m]))
+            /
+            sum by(namespace,app,class,method)(rate(dp_method_exec_total{app="{{app}}"}[10m]))
+          ) > 5000
+          AND
+          sum by(namespace,app,class,method)(increase(dp_method_exec_total{app="{{app}}"}[10m])) >= 2
+        for: 3m
+        labels:
+          severity: p2
+          alertType: qw
+          team: 'BY'
+        annotations:
+          summary: "【预警】{{serviceName}}-第三方API {{ $labels.method }} 平均耗时>5000ms"
+          description: "app={{ $labels.app }}, method={{ $labels.method }}，平均耗时={{ $value }}ms，持续3分钟大于5000ms"
+
+      - alert: "{{appSlug}}MethodExecAvgRtP1"
+        expr: |
+          (
+            sum by(namespace,app,class,method)(rate(dp_method_exec_time_total{app="{{app}}"}[10m]))
+            /
+            sum by(namespace,app,class,method)(rate(dp_method_exec_total{app="{{app}}"}[10m]))
+          ) > 10000
+          AND
+          sum by(namespace,app,class,method)(increase(dp_method_exec_total{app="{{app}}"}[10m])) >= 3
+        for: 2m
+        labels:
+          severity: p1
+          alertType: qw
+          team: 'BY'
+        annotations:
+          summary: "【严重】{{serviceName}}-第三方API {{ $labels.method }} 平均耗时>10000ms"
+          description: "app={{ $labels.app }}, method={{ $labels.method }}，平均耗时={{ $value }}ms，持续2分钟大于10000ms"
+
+      - alert: "{{appSlug}}MethodExecAvgRtP0"
+        expr: |
+          (
+            sum by(namespace,app,class,method)(rate(dp_method_exec_time_total{app="{{app}}"}[10m]))
+            /
+            sum by(namespace,app,class,method)(rate(dp_method_exec_total{app="{{app}}"}[10m]))
+          ) > 25000
+          AND
+          sum by(namespace,app,class,method)(increase(dp_method_exec_total{app="{{app}}"}[10m])) >= 5
+        for: 1m
+        labels:
+          severity: p0
+          alertType: tel
+          team: 'BY'
+        annotations:
+          summary: "【故障】{{serviceName}}-第三方API {{ $labels.method }} 平均耗时>25000ms"
+          description: "app={{ $labels.app }}, method={{ $labels.method }}，平均耗时={{ $value }}ms，持续1分钟大于25000ms"
