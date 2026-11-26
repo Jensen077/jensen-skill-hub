@@ -1,0 +1,14 @@
+{
+  "name": "platform-capability-delivery-doc",
+  "version": "1.0",
+  "description": "生成平台底座能力与项目交付落地的双视角 Markdown 文档，覆盖平台能力专题、项目落地、接入 curl、源码清单与真实日志观测",
+  "category": "ai-wiki",
+  "tags": ["平台能力", "知识库", "三方对接", "文档生成", "免登", "订单回传", "SSO"],
+  "author": "Jensen",
+  "team": "APAC",
+  "dependencies": [],
+  "platform": ["trae", "claude-code", "opencode"],
+  "lastUpdated": "2026-11-26",
+  "rating": 0,
+  "usageCount": 0
+}
